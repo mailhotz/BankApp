@@ -27,8 +27,26 @@ public class BankApp{
   /**Current directory info*/
   String curDir = System.getProperty("user.dir");
 
+  /**Indexes for start and end of html table in fileCont*/
+  int startIndex, endIndex;
+
 
   /**-------------------------------------------------------------------*/
+
+  /**Writes the value to the html table
+   * @param val Value to push into html table
+   * @param isDeposit True if deposit, false if withdraw
+  */
+  public void writeValue(Float val, boolean isDeposit){
+    
+  }
+
+  /**Returns balance from html table
+   * @return Value representing the balance of bank account
+  */
+  public Float getBalance(){
+
+  }
 
   /** Reads file given a file name
    * @param fName Name of file to read to
