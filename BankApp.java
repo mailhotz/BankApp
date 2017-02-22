@@ -30,7 +30,9 @@ public class BankApp{
 
   /**-------------------------------------------------------------------*/
 
-  /**
+  /** Reads file given a file name
+   * @param fName Name of file to read to
+   * @return File contents as list of string 
   */
   public List<String> readFile(String fName){
     Path path = Paths.get(fName);
@@ -43,7 +45,8 @@ public class BankApp{
     }
   }
 
-  /**
+  /** Writes to a file given a file name
+   * @param fName Name of file to write to
   */
   public void writeToFile(String fName){
     Path path = Paths.get(fName);
