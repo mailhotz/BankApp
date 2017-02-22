@@ -17,12 +17,7 @@ public class BankApp{
 
   /** Scanner used to handle standard input*/
   Scanner scan;
-  
-  /**File reader used to read HTML file*/
-  //FileReader reader;
-
-  /**File reader used to write HTML file*/
-  //FileWriter writer;
+ 
 
 
 
