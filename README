@@ -12,3 +12,13 @@ Exit: closes the application
 Withdraw and Deposit commands require a number after command 
 ex. Deposit \n 100 \n //Will deposit 100 dollars to bank account
 Can also put '$' is front of amount if desired
+
+
+
+/*---------------------------------
+*           RUN COMMANDS
+*----------------------------------*/
+1) To compile the program use the Makefile (i.e. make)
+2) To run the program use the runApp script (i.e. ./runApp)
+3) To remove object files use the Makefile (i.e. make clean)
+
