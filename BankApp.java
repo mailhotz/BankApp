@@ -157,7 +157,6 @@ public class BankApp{
         break;
       }
     }
-    System.out.println("Start:" + startIndex + " End:" + endIndex);
 
     scan = new Scanner(System.in);
     String tmp; //String used to hold user input
