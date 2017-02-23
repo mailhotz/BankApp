@@ -104,7 +104,7 @@ public class BankApp{
       return Files.readAllLines(path, StandardCharsets.UTF_8);
     }
     catch(IOException ex){
-      System.out.println("Unable to read file " + ex.toString());
+      System.out.println("Unable to read file\n" + ex.toString());
       return null;
     }
   }
@@ -118,7 +118,7 @@ public class BankApp{
       Files.write(path, fileCont, StandardCharsets.UTF_8);
     }
     catch(IOException ex){
-      System.out.println("Unable to write to file " + ex.toString());
+      System.out.println("Unable to write to file\n" + ex.toString());
     }
   }
 
@@ -148,6 +148,10 @@ public class BankApp{
   public void runApp(){
     fileCont = readFile(curDir + "/log.html");
 
+    //Close application if no html file present
+    if(fileCont == null)
+      System.exit(0);
+      
     //Get transaction table location
     for(int i = 0; i < fileCont.size(); i++){
       if(fileCont.get(i).matches(".*id=\"transactions\".*"))
