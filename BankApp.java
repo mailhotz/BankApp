@@ -14,6 +14,7 @@ import java.util.*;
 import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
 import java.io.IOException;
+import java.lang.Math;
 public class BankApp{
 
   /**----------------------Instance Variables----------------------------*/
@@ -37,7 +38,7 @@ public class BankApp{
    * @param val Value to push into html table
    * @param isDeposit True if deposit, false if withdraw
   */
-  public void writeValue(Float val, boolean isDeposit){
+  public void writeValue(double val, boolean isDeposit){
    
     //Used to create new html file
     List<String> tmp = new ArrayList<String>();
@@ -51,6 +52,7 @@ public class BankApp{
           tmp.add(pre[0] + val + "</td></tr>");
           added  = true; 
           i = endIndex - 1;
+          endIndex++;
         }
         else
           tmp.add(fileCont.get(i));
@@ -65,6 +67,7 @@ public class BankApp{
           tmp.add(pre[0] + "-" + val + "</td></tr>");
           added  = true; 
           i = endIndex - 1;
+          endIndex++;
         }
         else
           tmp.add(fileCont.get(i));
@@ -76,8 +79,19 @@ public class BankApp{
   /**Returns balance from html table
    * @return Value representing the balance of bank account
   */
-  public Float getBalance(){
-    return null;
+  public double getBalance(){
+    double ans = 0;
+    for(int i = startIndex + 5; i < endIndex; i++){
+      
+      //Referenced from: 
+      //http://stackoverflow.com/questions/4432560/remove-html-tags-from-string-using-java
+      String tmp = fileCont.get(i).replaceAll("<.*?>", "");
+
+      Double curVal = Double.parseDouble(tmp);
+      ans += curVal;
+    }
+    double round = Math.round(ans * 100.0) / 100.0;
+    return round;
   }
 
   /** Reads file given a file name
@@ -113,14 +127,14 @@ public class BankApp{
    * @param input String to be converted to float and checked
    * @return The value is returned after conversion if valid, otherwise returns -1
    */
-  public float checkIfNumber(String input){
+  public double checkIfNumber(String input){
 
     //Matching currency with regex, found base for this regex here: 
     //http://stackoverflow.com/questions/13848570/currency-regular-expression
     if(input.matches("(\\$?\\d*(\\.\\d\\d?)?)$")){
         if(input.charAt(0) == '$')
           input = input.substring(1);
-          return Float.parseFloat(input);
+          return Double.parseDouble(input);
     }
 
     //Not a currency value, returning an error state
@@ -164,10 +178,11 @@ public class BankApp{
         while(checkIfNumber(tmp) == -1)
           tmp = scan.next();
            
+        //Update html file
         writeValue(checkIfNumber(tmp), true);
         writeToFile(curDir + "/log.html");
-        System.out.println("Found deposit command");
       }
+
       //Withdraw command found
       else if(tmp.equals("withdraw")){
           
@@ -177,23 +192,24 @@ public class BankApp{
         //Test user input, until valid
         while(checkIfNumber(tmp) == -1)
           tmp = scan.next();
-          
+         
+        //Update html file 
         writeValue(checkIfNumber(tmp), false); 
         writeToFile(curDir + "/log.html");
-        System.out.println("Found withdraw command");
       }
+
       //Balance command found
-      else if(tmp.equals("balance")){
-        System.out.println("Found balance command");
-      }
+      else if(tmp.equals("balance"))
+        System.out.println("The current balance is: $" + getBalance()); 
+ 
       //Exit command found
-      else if(tmp.equals("exit")){
+      else if(tmp.equals("exit"))
         System.exit(0);
-      }
+ 
       //Invalid user input
-      else{
+      else
         System.out.println("Invalid command");
-      }
+      
       
       System.out.println("Please enter a command(Deposit, Withdraw, Balance, Exit)");
     }
