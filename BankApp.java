@@ -28,7 +28,7 @@ public class BankApp{
   String curDir = System.getProperty("user.dir");
 
   /**Indexes for start and end of html table in fileCont*/
-  int startIndex, endIndex;
+  int startIndex = -1, endIndex;
 
 
   /**-------------------------------------------------------------------*/
@@ -38,14 +38,46 @@ public class BankApp{
    * @param isDeposit True if deposit, false if withdraw
   */
   public void writeValue(Float val, boolean isDeposit){
+   
+    //Used to create new html file
+    List<String> tmp = new ArrayList<String>();
+    boolean added = false;
+    String[] pre = fileCont.get(endIndex - 1).split("-|[0-9]");
+
+    //Add new deposit row (i.e. positive number) to table
+    if(isDeposit){
+      for(int i = 0; i < fileCont.size(); i++){
+        if(i == endIndex && !added){
+          tmp.add(pre[0] + val + "</td></tr>");
+          added  = true; 
+          i = endIndex - 1;
+        }
+        else
+          tmp.add(fileCont.get(i));
+      }
+      fileCont = tmp;
     
+    }
+    //Add new withdraw row (i.e. negative number) to table
+    else{
+      for(int i = 0; i < fileCont.size(); i++){
+        if(i == endIndex && !added){
+          tmp.add(pre[0] + "-" + val + "</td></tr>");
+          added  = true; 
+          i = endIndex - 1;
+        }
+        else
+          tmp.add(fileCont.get(i));
+      }
+      fileCont = tmp;
+    }
   }
 
   /**Returns balance from html table
    * @return Value representing the balance of bank account
   */
   public Float getBalance(){
-
+    return null;
   }
 
   /** Reads file given a file name
@@ -101,9 +133,18 @@ public class BankApp{
   /**Run the loop necessary to run the application; i.e. looking for input*/
   public void runApp(){
     fileCont = readFile(curDir + "/log.html");
-    for(int i = 0; i < fileCont.size() - 1; i++){
-      System.out.println(fileCont.get(i));
+
+    //Get transaction table location
+    for(int i = 0; i < fileCont.size(); i++){
+      if(fileCont.get(i).matches(".*id=\"transactions\".*"))
+        startIndex = i;
+      if(fileCont.get(i).matches(".*</tbody>.*") && startIndex != -1){  
+        endIndex = i;
+        break;
+      }
     }
+    System.out.println("Start:" + startIndex + " End:" + endIndex);
+
     scan = new Scanner(System.in);
     String tmp; //String used to hold user input
 
@@ -123,7 +164,8 @@ public class BankApp{
         while(checkIfNumber(tmp) == -1)
           tmp = scan.next();
            
-
+        writeValue(checkIfNumber(tmp), true);
+        writeToFile(curDir + "/log.html");
         System.out.println("Found deposit command");
       }
       //Withdraw command found
@@ -135,7 +177,9 @@ public class BankApp{
         //Test user input, until valid
         while(checkIfNumber(tmp) == -1)
           tmp = scan.next();
-           
+          
+        writeValue(checkIfNumber(tmp), false); 
+        writeToFile(curDir + "/log.html");
         System.out.println("Found withdraw command");
       }
       //Balance command found
