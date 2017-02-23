@@ -4,10 +4,11 @@ Allows user to deposit, withdraw or check balance
 
 
 Available comands
-Deposit: Add mone to account
+Deposit: Add money to account
 Withdraw: Remove money from account
 Check Balance: Return money available to account
 Exit: closes the application
 
 Withdraw and Deposit commands require a number after command 
 ex. Deposit \n 100 \n //Will deposit 100 dollars to bank account
+Can also put '$' is front of amount if desired
